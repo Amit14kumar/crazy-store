@@ -1,0 +1,98 @@
+.dg-scroll-lock {
+  overflow: hidden;
+}
+
+.dg-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  background: #000;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+}
+
+.dg-sphere {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg);
+  cursor: grab;
+}
+
+.dg-sphere:active {
+  cursor: grabbing;
+}
+
+.dg-sphere-face {
+  position: absolute;
+  border-radius: 12px;
+  overflow: hidden;
+  backface-visibility: visible;
+  transition: box-shadow 0.3s ease;
+}
+
+.dg-sphere-face:hover {
+  box-shadow: 0 0 0 2px #fff, 0 20px 60px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.dg-sphere-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Lightbox */
+.dg-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: dg-fade-in 0.25s ease;
+}
+
+@keyframes dg-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dg-lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.dg-lightbox-content img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.dg-lightbox-close {
+  position: absolute;
+  top: -44px;
+  right: 0;
+  color: #fff;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 8px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.dg-lightbox-close:hover {
+  opacity: 1;
+}
