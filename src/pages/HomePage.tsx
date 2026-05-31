@@ -26,21 +26,6 @@ interface Product {
 
 const HERO_IMG = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=90&auto=format&fit=crop'
 
-const DOME_IMAGES = [
-  { src: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&q=80', alt: 'Fashion' },
-  { src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80', alt: 'Style' },
-  { src: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80', alt: 'Look' },
-  { src: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80', alt: 'Outfit' },
-  { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80', alt: 'Collection' },
-  { src: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80', alt: 'Dress' },
-  { src: 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=400&q=80', alt: 'Beauty' },
-  { src: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&q=80', alt: 'Model' },
-  { src: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80', alt: 'Editorial' },
-  { src: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80', alt: 'Trend' },
-  { src: 'https://images.unsplash.com/photo-1475180429745-f3aa71cf0a56?w=400&q=80', alt: 'Jewellery' },
-  { src: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80', alt: 'Bags' },
-]
-
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [heroLoaded, setHeroLoaded] = useState(false)
@@ -50,6 +35,16 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   useEffect(() => { getProducts().then(setProducts).catch(() => {}) }, [])
+
+  // Build dome images from real product images, filtering out size charts & utility images
+  const SIZE_CHART_PATTERN = /size\s*chart|measurement|size\s*guide|table|inches|waist|bust|hip|cm\b/i
+  const domeImages = products.flatMap(p => {
+    const imgs = (p.images?.edges ?? [])
+      .filter(e => !SIZE_CHART_PATTERN.test(e.node.altText ?? ''))
+      .slice(0, 3) // max 3 per product — product shots only
+    if (imgs.length === 0) return [{ src: '', alt: p.title }]
+    return imgs.map(e => ({ src: e.node.url, alt: e.node.altText || p.title }))
+  })
 
   const handleAddToCart = async (variantId: string) => {
     await addItem(variantId)
@@ -176,7 +171,7 @@ export default function HomePage() {
 
         {/* Keep DomeGallery as-is */}
         <DomeGallery
-          images={DOME_IMAGES}
+          images={domeImages}
           containerHeight="65vh"
           fov={340}
           faceSize={145}

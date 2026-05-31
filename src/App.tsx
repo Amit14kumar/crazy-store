@@ -7,6 +7,7 @@ import CartDrawer from './components/CartDrawer'
 import HomePage from './pages/HomePage'
 import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import CheckoutPage from './pages/CheckoutPage'
 import theme from './theme'
 
 
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:handle" element={<ProductDetailPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
           </Routes>
         </CartProvider>
       </BrowserRouter>

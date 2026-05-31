@@ -29,7 +29,7 @@ export async function getProducts() {
             priceRange {
               minVariantPrice { amount currencyCode }
             }
-            images(first: 1) {
+            images(first: 10) {
               edges { node { url altText } }
             }
             variants(first: 1) {
@@ -83,6 +83,21 @@ export async function addToCart(cartId, variantId, quantity = 1) {
     }
   `, { cartId, lines: [{ merchandiseId: variantId, quantity }] });
   return data.cartLinesAdd.cart;
+}
+
+export async function updateCartLine(cartId, lineId, quantity) {
+  const data = await shopifyFetch(`
+    mutation($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+      cartLinesUpdate(cartId: $cartId, lines: $lines) {
+        cart { id checkoutUrl totalQuantity
+          lines(first: 20) {
+            edges { node { id quantity cost { totalAmount { amount } } merchandise { ... on ProductVariant { id title product { title images(first:1){ edges{ node{ url } } } } price { amount } } } } }
+          }
+        }
+      }
+    }
+  `, { cartId, lines: [{ id: lineId, quantity }] });
+  return data.cartLinesUpdate.cart;
 }
 
 export async function removeFromCart(cartId, lineId) {

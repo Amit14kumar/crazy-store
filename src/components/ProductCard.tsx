@@ -37,7 +37,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (!variantId) return
-    await addItem(variantId)
+    await addItem(variantId, 1, product.title, image?.url)
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }
@@ -45,7 +45,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const handleBuyNow = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (!variantId) return
-    await addItem(variantId)
+    await addItem(variantId, 1, product.title, image?.url)
     navigate(`/products/${product.handle}`)
   }
 

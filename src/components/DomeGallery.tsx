@@ -110,7 +110,10 @@ export default function DomeGallery({
               }}
               onPointerUp={handleFacePointerUp}
             >
-              <img src={face.src} alt={face.alt} loading="lazy" draggable={false} />
+              {face.src
+                ? <img src={face.src} alt={face.alt} loading="lazy" draggable={false} />
+                : <div className="dg-sphere-face-empty" aria-label={face.alt} />
+              }
             </div>
           ))}
         </div>
